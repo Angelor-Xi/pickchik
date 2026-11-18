@@ -18,8 +18,8 @@ export default function Sidebar() {
  
   
       <div className="sidebarNote"> 
-        <strong>Практика 1</strong> 
-        <span>Статический интерфейс на React</span> 
+         <strong>Практика 2</strong> 
+        <span>Состояние, формы и localStorage</span>
       </div> 
     </aside> 
   ); 
