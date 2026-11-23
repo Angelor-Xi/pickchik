@@ -62,3 +62,30 @@ GET {{baseUrl}}/api/tasks/00000000-0000-4000-8000-000000000000
   
 ### Ошибка 404: неизвестный endpoint 
 GET {{baseUrl}}/api/unknown 
+
+### Самостоятельное: Фильтр по проекту
+GET {{baseUrl}}/api/tasks?project=TaskFlow
+
+### Самостоятельное: Статистика задач
+GET {{baseUrl}}/api/stats
+
+### Самостоятельное: Создать задачу с description
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Изучить SQL JOIN",
+  "project": "Обучение",
+  "status": "Нужно сделать",
+  "priority": "Высокий",
+  "dueDate": "2026-10-05",
+  "description": "Разобраться с объединением таблиц в PostgreSQL"
+}
+
+### Самостоятельное: Изменить description задачи
+PATCH {{baseUrl}}/api/tasks/{{taskId}}
+Content-Type: application/json
+
+{
+  "description": "Обновлённое описание через PATCH"
+}
