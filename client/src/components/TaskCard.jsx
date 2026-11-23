@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function getStatusClass(status) { 
   if (status === 'Готово') return 'status done'; 
   if (status === 'В работе') return 'status progress'; 
@@ -15,7 +17,6 @@ function formatDate(value) {
   }).format(date); 
 } 
  
-  
 export default function TaskCard({ 
   task, 
   onEdit, 
@@ -43,7 +44,6 @@ export default function TaskCard({
             > 
               В работу 
             </button> 
- 
           )} 
   
           {task.status !== 'Готово' && ( 
@@ -54,13 +54,22 @@ export default function TaskCard({
               Готово 
             </button> 
           )} 
-  
-          <button 
-            type="button" 
-            onClick={() => onEdit(task)} 
+
+          <Link 
+            className="taskActionLink" 
+            to={`/tasks/${task.id}`} 
           > 
-            Изменить 
-          </button> 
+            Открыть 
+          </Link>
+
+          {onEdit && ( 
+            <button 
+              type="button" 
+              onClick={() => onEdit(task)} 
+            > 
+              Изменить 
+            </button> 
+          )}
   
           <button 
             className="dangerAction" 
@@ -72,7 +81,6 @@ export default function TaskCard({
         </div> 
       </div> 
   
- 
       <div className="taskDate"> 
         <span>Срок</span> 
         <strong>{formatDate(task.dueDate)}</strong> 
