@@ -1,86 +1,107 @@
-import { useState } from 'react'; 
- 
-import { Link, useNavigate } from 'react-router-dom'; 
-import { loginUser } from '../api/authApi.js'; 
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from '../api/authApi.js';
+
+export default function LoginPage({ onAuthenticated }) {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   
-export default function LoginPage({ onAuthenticated }) { 
-  const navigate = useNavigate(); 
-  const [form, setForm] = useState({ 
-    email: '', 
-    password: '', 
-  }); 
-  const [error, setError] = useState(''); 
-  const [submitting, setSubmitting] = useState(false); 
-  
-  function handleChange(event) { 
-    const { name, value } = event.target; 
-    setForm((current) => ({ ...current, [name]: value })); 
-  } 
-  
-  async function handleSubmit(event) { 
-    event.preventDefault(); 
-    setSubmitting(true); 
-    setError(''); 
-  
-    try { 
-      const user = await loginUser(form); 
-      onAuthenticated(user); 
-      navigate('/'); 
-    } catch (requestError) { 
-      setError(requestError.message); 
- 
-    } finally { 
-      setSubmitting(false); 
-    } 
-  } 
-  
-  return ( 
-    <main className="authPage"> 
-      <section className="authCard"> 
-        <p className="eyebrow">TaskFlow</p> 
-        <h1>Вход</h1> 
-        <p className="subtitle">Введите данные своей учетной записи.</p> 
-  
-        {error && <div className="authError">{error}</div>} 
-  
-        <form onSubmit={handleSubmit}> 
-          <label className="field"> 
-            <span>Email</span> 
-            <input 
-              type="email" 
-              name="email" 
-              value={form.email} 
-              onChange={handleChange} 
-              required 
-              autoFocus 
-            /> 
-          </label> 
-  
-          <label className="field"> 
- 
-            <span>Пароль</span> 
-            <input 
-              type="password" 
-              name="password" 
-              value={form.password} 
-              onChange={handleChange} 
-              required 
-            /> 
-          </label> 
-  
-          <button 
-            className="primaryButton authSubmit" 
-            type="submit" 
-            disabled={submitting} 
-          > 
-            {submitting ? 'Вход...' : 'Войти'} 
-          </button> 
-        </form> 
-  
-        <p className="authSwitch"> 
-          Нет аккаунта? <Link to="/register">Регистрация</Link> 
-        </p> 
-      </section> 
-    </main> 
-  ); 
-} 
+  const [showPassword, setShowPassword] = useState(false);
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setSubmitting(true);
+    setError('');
+    try {
+      const user = await loginUser(form);
+      onAuthenticated(user);
+      navigate('/');
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <main className="authPage">
+      <section className="authCard">
+        <p className="eyebrow">TaskFlow</p>
+        <h1>Вход</h1>
+        <p className="subtitle">Введите данные своей учетной записи.</p>
+        
+        {error && <div className="authError">{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <label className="field">
+            <span>Email</span>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              autoFocus
+            />
+          </label>
+          
+          <label className="field">
+            <span>Пароль</span>
+
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+            <label 
+            className="field" 
+            style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                marginTop: '-8px',
+                cursor: 'pointer',
+                fontSize: '14px'
+            }}
+            >
+            <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+                style={{ 
+                width: '16px', 
+                height: '16px',
+                margin: 0,
+                cursor: 'pointer'
+                }}
+            />
+            <span style={{ color: '#6b7280', userSelect: 'none' }}>Показать пароль</span>
+            </label>
+
+          <button
+            className="primaryButton authSubmit"
+            type="submit"
+            disabled={submitting}
+          >
+            {submitting ? 'Вход...' : 'Войти'}
+          </button>
+        </form>
+        
+        <p className="authSwitch">
+          Нет аккаунта? <Link to="/register">Регистрация</Link>
+        </p>
+      </section>
+    </main>
+  );
+}
